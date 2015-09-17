@@ -1,10 +1,9 @@
 #include<sys/socket.h>
 #include<arpa/inet.h> //inet_addr
-#include<stdlib.h>
-#include<stdio.h>
-struct sockaddr_in createAddr()
+
+void createAddr(struct sockaddr_in* server ,int port, char* ip_addr)
 {
-	fprintf(stdout,"I am the function\n");
-
-
+	(*server).sin_family = AF_INET;
+	(*server).sin_port = htons(port);
+	inet_aton(ip_addr, &(*server).sin_addr);
 }

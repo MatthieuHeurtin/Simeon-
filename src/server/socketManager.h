@@ -1,4 +1,5 @@
-
 #include<sys/socket.h>
-#include<arpa/inet.h> //inet_addr/*create an ip_address*/
-struct sockaddr_in createAddr();
+#include<arpa/inet.h> 
+
+/*configure an ip_address*/
+void createAddr(struct sockaddr_in *server, int port, char* ip_addr);
