@@ -1,0 +1,25 @@
+RSA generator:
+    - k (int) = security
+    - nbN (int, optional) = number of modulus to choose amongst, 1 by default
+    - nbKey (int, optional) = number of key pairs to choose amongst, 1 by default
+    
+    generates (p,q) random primes such that pq = N (k bits)
+        if nbN > 1, give choice to pick N among nbN possibilities
+    generates pair of key (e,d) such that ed = 1 mod phi(N) and gcd(e,phi(N)) = 1
+        if nbKey > 1, give choice to pick (e,d) among nbKey possibilities
+    returns N, (e,d)
+    
+RSA:
+    - mode = 'encrypt' or 'decrypt'
+    - message (char) = text to cipher or decipher
+    - key (int) = e or d
+    - modulo (int) = N
+    
+    convert the message (char) into a message (int)
+    compute message^(e or d) mod N
+    convert message (int) into message (char)
+    return message
+    
+other functions
+    convert int to char
+    convert char to int
