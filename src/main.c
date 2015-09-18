@@ -1,14 +1,19 @@
 #include<stdlib.h>
 #include<stdio.h>
-#include<string.h>    //strlen
-#include<unistd.h>    //write
+#include<string.h>   
+#include<unistd.h>   
 
 #include "server/socketManager.h"
 #include "thread/threadManager.h"
+#include "thread/threadMethod.h"
 
 //define
 #define RETURN_ERROR -1
 #define DEFAULT_PORT 8888
+#define MAX_CLIENT 30
+
+
+
 
 
 //Usage: ip port
@@ -19,13 +24,13 @@ int main(int argc, char** argv)
 	char *ip_addr; 
 	int listener_sock; 
 	int c;
-	char client_message[2000];
-    
+	char *welcomeMessage = "Welcome on Simeon v1.0\r\n";
+	int client_sock[MAX_CLIENT]; 
+	int nb_client = 0;   
 
-	struct sockaddr_in client;
+
 	
 
-createThread();
 	//check parameters
 	if (argc != 2)
 	{
@@ -43,11 +48,17 @@ createThread();
 	listener_sock = socket(AF_INET , SOCK_STREAM , 0);
 	if (listener_sock == -1)
 	{
-		fprintf(stdout, "Could not create socket");
+		fprintf(stderr, "Could not create Listener_sock");
 	}
-	fprintf(stdout, "Socket created\n");
+	fprintf(stdout, "Listener_sock created\n");
      
-
+	//put some options
+	int opt = 1;
+	if( setsockopt(listener_sock, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0 )
+	{
+		fprintf(stderr,"setsockopt failed");
+		return RETURN_ERROR;
+	}
      
 	//Bind
 	if( bind(listener_sock,(struct sockaddr *)&server , sizeof(server)) < 0)
@@ -61,33 +72,40 @@ createThread();
 	//sokcet is passive
 	listen(listener_sock , 2);
 	     
-	//Accept and incoming connection
-	fprintf(stdout,"Waiting for incoming connections...\n");
-	c = sizeof(struct sockaddr_in);
 
-	//wait an incoming client
-	int client_sock = accept(listener_sock, (struct sockaddr *)&client, (socklen_t*)&c);
-	if (client_sock < 0)
+
+	while (1)
 	{
-		fprintf(stderr,"accept failed");
-		return RETURN_ERROR;
-	}
-	fprintf(stdout,"Connection accepted\n");
-	     
+		//Accept and incoming connection
+		fprintf(stdout,"Waiting for incoming connections...\n");
+		c = sizeof(struct sockaddr_in);
+		struct sockaddr_in *client = addSockaddr_in();  
+	
+		//wait an incoming client
+		client_sock[nb_client] = accept(listener_sock, (struct sockaddr *)client, (socklen_t*)&c);
+	
+		//TODO check if client already connected
+		
+		if (client_sock[nb_client] < 0)
+		{
+			fprintf(stderr,"accept failed from client\n");
+			return RETURN_ERROR;
+		}
+		fprintf(stdout,"Connection accepted and moved in a thread, socket = %d\n", client_sock[nb_client]);
+		write((int)client_sock[nb_client] , welcomeMessage , strlen(welcomeMessage));
+		createThread(connectionEtablished, &client_sock[nb_client]);
+		nb_client ++;
+	}	
+	
+while (1);
 
 
-
-//=============================================beow don't change
+	
+//=============================================below don't change
 
 /*
 
-    //Receive a message from client
-    while( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 )
-    {
-        //Send the message back to client
-        write(client_sock , client_message , strlen(client_message));
-    }
-     
+
     if(read_size == 0)
     {
         puts("Client disconnected");
@@ -100,3 +118,8 @@ createThread();
      */
     return 0;
 }
+
+
+
+
+
