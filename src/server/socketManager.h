@@ -2,7 +2,13 @@
 #include<arpa/inet.h> 
 
 /* represent an incoming client*/
+struct client
+{
+	int id;
+	
 
+};
+typedef struct cient Client;
 
 
 

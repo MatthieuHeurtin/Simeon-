@@ -4,7 +4,7 @@ CFLAGS=-W -Wall -ansi -pedantic
 EXEC_NAME = run
 
 
-all: main IO server thread
+all: main IO server thread list
 	#Linking phase
 	gcc $(BUILD)/*.o -o $(BUILD)/$(EXEC_NAME) -pthread
 	
@@ -31,6 +31,11 @@ thread: $(SRC_THREAD)
 	gcc -c  $^ 
 	mv *.o $(BUILD)/
 
+SRC_LIST=$(wildcard ./src//list/*.c)
+list: $(SRC_LIST)
+	#Generate OBJECT for list
+	gcc -c  $^ 
+	mv *.o $(BUILD)/
 
 
 

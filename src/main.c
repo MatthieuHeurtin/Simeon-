@@ -6,6 +6,7 @@
 #include "server/socketManager.h"
 #include "thread/threadManager.h"
 #include "thread/threadMethod.h"
+#include "list/list.h"
 
 //define
 #define RETURN_ERROR -1
@@ -17,6 +18,22 @@
 //Usage: ip port
 int main(int argc, char** argv)
 {
+
+//TEST list
+List l = createList();
+l = addElement(l, 69);
+l = addElement(l, 70);
+l = addElement(l, 71);
+l = addElement(l, 72);
+l = addElement(l, 73);
+
+showList(l);
+
+
+
+
+
+
 	//variables
 	int port;
 	char *ip_addr; 
@@ -27,7 +44,7 @@ int main(int argc, char** argv)
 	int nb_client = 0;   
 
 
-	
+	//TODO format parameters
 
 	//check parameters
 	if (argc != 2)
@@ -82,7 +99,9 @@ int main(int argc, char** argv)
 		//wait an incoming client
 		client_sock[nb_client] = accept(listener_sock, (struct sockaddr *)client, (socklen_t*)&c);
 	
-		//TODO check if client already connected
+				
+
+		//TODO check if the client is already connected
 		
 		if (client_sock[nb_client] < 0)
 		{
