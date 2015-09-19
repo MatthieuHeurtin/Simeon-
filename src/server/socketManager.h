@@ -5,10 +5,9 @@
 struct client
 {
 	int id;
-	
 
 };
-typedef struct cient Client;
+typedef struct client Client;
 
 
 

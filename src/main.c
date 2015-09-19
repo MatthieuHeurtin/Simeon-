@@ -19,30 +19,15 @@
 int main(int argc, char** argv)
 {
 
-//TEST list
-List l = createList();
-l = addElement(l, 69);
-l = addElement(l, 70);
-l = addElement(l, 71);
-l = addElement(l, 72);
-l = addElement(l, 73);
-
-showList(l);
-
-
-
-
-
-
 	//variables
 	int port;
 	char *ip_addr; 
 	int listener_sock; 
 	int c;
 	char *welcomeMessage = "Welcome on Simeon v1.0\r\n";
-	int client_sock[MAX_CLIENT]; 
+	Client client_sock[MAX_CLIENT]; 
 	int nb_client = 0;   
-
+	List list_clients = createList();
 
 	//TODO format parameters
 
@@ -64,6 +49,7 @@ showList(l);
 	if (listener_sock == -1)
 	{
 		fprintf(stderr, "Could not create Listener_sock");
+		return RETURN_ERROR;
 	}
 	fprintf(stdout, "Listener_sock created\n");
      
@@ -97,24 +83,30 @@ showList(l);
 		struct sockaddr_in *client = addSockaddr_in();  
 	
 		//wait an incoming client
-		client_sock[nb_client] = accept(listener_sock, (struct sockaddr *)client, (socklen_t*)&c);
+		client_sock[nb_client].id = accept(listener_sock, (struct sockaddr *)client, (socklen_t*)&c);
 	
 				
 
 		//TODO check if the client is already connected
 		
-		if (client_sock[nb_client] < 0)
+		if (client_sock[nb_client].id < 0)
 		{
 			fprintf(stderr,"accept failed from client\n");
 			return RETURN_ERROR;
 		}
-		fprintf(stdout,"Connection accepted and moved in a thread, socket = %d\n", client_sock[nb_client]);
-		write((int)client_sock[nb_client] , welcomeMessage , strlen(welcomeMessage));
-		createThread(connectionEtablished, &client_sock[nb_client]);
+		
+		//add to list of client
+		list_clients = addElement(list_clients, &client_sock[nb_client]);
+		fprintf(stdout, "Print client\n");
+		showList(list_clients, printClient);
+
+
+		fprintf(stdout,"Connection accepted and moved in a thread, socket = %d\n", client_sock[nb_client].id);
+		write((int)client_sock[nb_client].id , welcomeMessage , strlen(welcomeMessage)); //write welcome
+		createThread(connectionEtablished, &client_sock[nb_client]); //create thread
 		nb_client ++;
 	}	
 	
-while (1);
 
 
 	

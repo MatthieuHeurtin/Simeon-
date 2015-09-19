@@ -2,11 +2,12 @@ CC= gcc
 BUILD = ./build
 CFLAGS=-W -Wall -ansi -pedantic
 EXEC_NAME = run
+TESTS= ./tests
 
 
 all: main IO server thread list
 	#Linking phase
-	gcc $(BUILD)/*.o -o $(BUILD)/$(EXEC_NAME) -pthread
+	gcc $(BUILD)/*.o -o $(BUILD)/$(EXEC_NAME) -pthread 
 	
 main : 
 	#Generate OBJECT for Main
@@ -38,6 +39,18 @@ list: $(SRC_LIST)
 	mv *.o $(BUILD)/
 
 
+#compile tests files
+tests: list_test
+	#Generate OBJECT for tests end
+	
+
+list_test: list 
+	#Generate OBJECT for tests list
+	gcc -c $(TESTS)/list_test.c -o $(TESTS)/list_test.o 
+	mv $(TESTS)/*.o $(BUILD)/
+	gcc $(BUILD)/list_test.o $(BUILD)/list.o -o $(BUILD)/list_test
+
+
 
 clean: 
 	#Clean all files
@@ -47,7 +60,9 @@ run:
 	#Exec 
 	$(BUILD)/$(EXEC_NAME)
 
-
+run_tests:
+	#Exec list_test
+	$(BUILD)/list_test
 
 
 
