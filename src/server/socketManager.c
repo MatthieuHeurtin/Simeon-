@@ -1,6 +1,8 @@
 #include<sys/socket.h>
-#include<arpa/inet.h> //inet_addr
+#include<arpa/inet.h> /*inet_addr*/
 #include <stdlib.h>
+#include <netinet/in.h>
+
 
 
 /*configure an ip_address*/

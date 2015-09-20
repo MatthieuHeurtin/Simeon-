@@ -1,5 +1,4 @@
-
-//this struc is a list
+/*this struc is a list*/
 struct list
 {
 	void* element;

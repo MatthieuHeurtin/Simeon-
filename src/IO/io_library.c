@@ -2,23 +2,38 @@
 #include <stdio.h>
 #include <unistd.h>
 
+/*check if a file exist, if not create it and return a pointer on it*/
+int exist(char*path)
+{
+	if( access(path, F_OK ) != -1 ) 
+	{
+		return 0;
+	} 
+	else 
+	{
+		return -1;
+	}
+}
+
+
+
 char* readFromOneFile(char* path)
 {
-	//check if exists
+	/*check if exists*/
 	if (exist(path) != 0)
 	{
 		return NULL;
 	}
 	
 
-	char * buff = malloc( 255 * sizeof(char)); //alloc a buffer of 255 TODO count number of char in the file
+	char * buff = malloc( 255 * sizeof(char)); /*alloc a buffer of 255 TODO count number of char in the file*/
 	if (buff == NULL)
 	{	
-		//TODO ERROR MSG
+		/*TODO ERROR MSG*/
 		return NULL;
 	}
 	FILE * file = fopen( path, "r" );
-	fscanf(file, "%s", buff); //read the file
+	fscanf(file, "%s", buff); /*read the file*/
 	fclose(file);
 	return buff;
 }
@@ -36,15 +51,4 @@ int writeInFile(char* path, char* msg)
 }
 
 
-/*check if a file exist, if not create it and return a pointer on it*/
-int exist(char*path)
-{
-	if( access(path, F_OK ) != -1 ) 
-	{
-		return 0;
-	} 
-	else 
-	{
-		return -1;
-	}
-}
+

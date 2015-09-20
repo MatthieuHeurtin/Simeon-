@@ -5,37 +5,37 @@ EXEC_NAME = run
 TESTS= ./tests
 
 
-all: main IO server thread list
+all: main server thread list
 	#Linking phase
-	gcc $(BUILD)/*.o -o $(BUILD)/$(EXEC_NAME) -pthread 
+	gcc $(BUILD)/*.o -o $(BUILD)/$(EXEC_NAME) -pthread $(CFLAGS)
 	
 main : 
 	#Generate OBJECT for Main
-	gcc -c ./src/main.c -o  $(BUILD)/main.o  
+	gcc -c ./src/main.c -o  $(BUILD)/main.o  $(CFLAGS)
 
 SRC_IO=$(wildcard ./src//IO/*.c)
 IO: $(SRC_IO)
 	#Generate OBJECT for IO
-	gcc -c  $^ 
+	gcc -c  $^ $(CFLAGS)
 	mv *.o $(BUILD)/
 
 
 SRC_SERVER=$(wildcard ./src//server/*.c)
 server: $(SRC_SERVER)
 	#Generate OBJECT for server
-	gcc -c  $^ 
+	gcc -c  $^ $(CFLAGS) -D_BSD_SOURCE
 	mv *.o $(BUILD)/
 
 SRC_THREAD=$(wildcard ./src//thread/*.c)
 thread: $(SRC_THREAD)
 	#Generate OBJECT for thread
-	gcc -c  $^ 
+	gcc -c  $^ $(CFLAGS)
 	mv *.o $(BUILD)/
 
 SRC_LIST=$(wildcard ./src//list/*.c)
 list: $(SRC_LIST)
 	#Generate OBJECT for list
-	gcc -c  $^ 
+	gcc -c  $^ $(CFLAGS)
 	mv *.o $(BUILD)/
 
 

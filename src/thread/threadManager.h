@@ -1,4 +1,3 @@
 /*create and run a thread*/
-void createThread( void *threadMethod, void* arg);
+void createThread( void *(*threadMethod) (void*), void* arg);
 
-void execProcess(char* command);

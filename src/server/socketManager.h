@@ -5,6 +5,7 @@
 struct client
 {
 	int id;
+	char *name;
 
 };
 typedef struct client Client;

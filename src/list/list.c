@@ -5,7 +5,7 @@
 #include "../server/socketManager.h"
 #include "list.h"
 
-//used to create a list
+/*used to create a list*/
 List createList()
 {
 	List l = NULL;
@@ -13,7 +13,7 @@ List createList()
 }
 
 
-//used to add an element
+/*used to add an element*/
 List addElement(List l, void* element)
 {
 	List q = calloc(1, sizeof(*q));
@@ -41,7 +41,7 @@ void printClient(void * element)
 
 
 
-//used to display all elements
+/*used to display all elements*/
 void showList(List l, void (*function) ())
 {
 	List tmp = l;
