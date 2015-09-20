@@ -5,6 +5,9 @@
 #include <sys/types.h> /* for pid_t */
 #include <sys/wait.h> /* for wait */
 
+
+//All this method are executed by a thread. This thread represent a connection with the client
+
 void execProcess(char* command)
 { 
 	pid_t parent = getpid();
@@ -15,9 +18,10 @@ void execProcess(char* command)
 	} 
 	else if (pid == 0) //child
 	{
-		char *argv[2];
-		strcpy(argv[0], command);
-		argv[1] = NULL;
+   char *argv[] = {command, (char *) 0 };
+
+	 
+
 		fprintf(stdout, "Command = %s\n", argv[0]);
 		execvp(argv[0], argv);
 	}
@@ -26,6 +30,7 @@ void execProcess(char* command)
 		fprintf(stdout, "I am the parent\n"); 
 		int status;
 		waitpid(pid, &status, 0);
+		free(command);
 	}
 }
 
@@ -34,14 +39,17 @@ void execProcess(char* command)
 void *connectionEtablished(int* client_sock)
 {
 int read_size;
-char client_message[2000];
+char client_message[512];
 
   //Receive a message from client
-    while( (read_size = recv(*client_sock , client_message , 2000 , 0)) > 0 )
+    while( (read_size = recv(*client_sock , client_message , 512 , 0)) > 0 )
     {
-        //Send the message back to client
-	//fprintf(stdout, "Command = %s", client_message);
-	execProcess(client_message);
+	//format command
+	int size = strlen(client_message) - 2;
+	char * msg = calloc(strlen(client_message)-2, sizeof(char));
+	strncpy(msg, client_message, size);
+	execProcess(msg);
+        memset(client_message ,0 , 512);  //clear the variable
 
     }
 }
