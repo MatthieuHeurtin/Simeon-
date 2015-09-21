@@ -5,7 +5,7 @@ EXEC_NAME = run
 TESTS= ./tests
 
 
-all: main server thread list
+all: logs main server thread list IO config
 	#Linking phase
 	gcc $(BUILD)/*.o -o $(BUILD)/$(EXEC_NAME) -pthread $(CFLAGS)
 	
@@ -35,6 +35,18 @@ thread: $(SRC_THREAD)
 SRC_LIST=$(wildcard ./src//list/*.c)
 list: $(SRC_LIST)
 	#Generate OBJECT for list
+	gcc -c  $^ $(CFLAGS)
+	mv *.o $(BUILD)/
+
+SRC_LOGS=$(wildcard ./src//logs/*.c)
+logs: $(SRC_LOGS)
+	#Generate OBJECT for logs
+	gcc -c  $^ $(CFLAGS)
+	mv *.o $(BUILD)/
+
+SRC_CONFIG=$(wildcard ./src//config/*.c)
+config: $(SRC_CONFIG)
+	#Generate OBJECT for config
 	gcc -c  $^ $(CFLAGS)
 	mv *.o $(BUILD)/
 

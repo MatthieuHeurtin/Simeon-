@@ -7,6 +7,10 @@
 #include "thread/threadManager.h"
 #include "thread/threadMethod.h"
 #include "list/list.h"
+#include "logs/log.h"
+#include "config/configManager.h"
+
+#include <errno.h>
 
 /*define*/
 #define RETURN_ERROR -1
@@ -18,7 +22,6 @@
 /*Usage: ip port*/
 int main(int argc, char** argv)
 {
-
 
 	/*variables*/
 	int port;
@@ -32,6 +35,10 @@ int main(int argc, char** argv)
 	struct sockaddr_in server;
 	int opt = 1;
 	struct sockaddr_in *client;
+	char *msg;
+	
+	loadConfig();
+
 
 	/*TODO format parameters*/
 	argv = NULL;
@@ -52,15 +59,15 @@ int main(int argc, char** argv)
 	listener_sock = socket(AF_INET , SOCK_STREAM , 0);
 	if (listener_sock == -1)
 	{
-		fprintf(stderr, "Could not create Listener_sock");
+		plog("Could not create Listener_sock", 1);
 		return RETURN_ERROR;
 	}
-	fprintf(stdout, "Listener_sock created\n");
+	plog("Listener_sock created\n", 0);
      
 	/*put some options*/
 	if( setsockopt(listener_sock, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0 )
 	{
-		fprintf(stderr,"setsockopt failed");
+		plog("setsockopt failed\n", 1);
 		return RETURN_ERROR;
 	}
      
@@ -68,10 +75,11 @@ int main(int argc, char** argv)
 	if( bind(listener_sock,(struct sockaddr *)&server , sizeof(server)) < 0)
 	{
 		/*print the error message*/
-		fprintf(stderr,"bind failed. Error\n");
+		plog("bind failed. Error\n", 1);
+ printf("ERROR: %s\n", strerror(errno));
 		return RETURN_ERROR;
 	}
-	fprintf(stdout,"bind done\n");
+	plog("bind done\n", 0);
 	     
 	/*sokcet is passive*/
 	listen(listener_sock , 2);
@@ -81,7 +89,7 @@ int main(int argc, char** argv)
 	while (1)
 	{
 		/*Accept and incoming connection*/
-		fprintf(stdout,"Waiting for incoming connections...\n");
+		plog("Waiting for incoming connections...\n", 0);
 		c = sizeof(struct sockaddr_in);
 
 		/*create struct client and wait an incomming connection*/
@@ -95,7 +103,7 @@ int main(int argc, char** argv)
 		
 		if (client_sock[nb_client].id < 0)
 		{
-			fprintf(stderr,"accept failed from client\n");
+			plog("accept failed from client\n", 1);
 			return RETURN_ERROR;
 		}
 		
@@ -103,8 +111,10 @@ int main(int argc, char** argv)
 		list_clients = addElement(list_clients, &client_sock[nb_client]);
 		/*showList(list_clients, printClient);*/
 
-
-		fprintf(stdout,"Connection accepted and moved in a thread, socket = %d\n", client_sock[nb_client].id);
+		msg= calloc(64, sizeof(char));
+		sprintf(msg, "Connection accepted and moved in a thread, socket = %d\n", client_sock[nb_client].id);
+		plog(msg, 0);
+		free(msg);
 		write((int)client_sock[nb_client].id , welcomeMessage , strlen(welcomeMessage)); /*write welcome*/
 		createThread(connectionEtablished, &client_sock[nb_client]); /*create thread*/
 		nb_client ++;

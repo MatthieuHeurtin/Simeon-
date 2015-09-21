@@ -6,6 +6,7 @@
 #include <sys/wait.h> /* for wait */
 #include <sys/types.h>
 #include <sys/socket.h>
+#include "../logs/log.h"
 
 /*All this method are executed by a thread. This thread represents a connection with the client*/
 
@@ -20,7 +21,7 @@ int execProcess(char* command)
 	pid = fork();
 	if (pid == -1) /*if problem*/
 	{
-		fprintf(stderr, "fork failed\n");
+		plog("fork failed\n", 1);
 		return 1;
 	} 
 	else if (pid>0) /*parents*/ 
@@ -35,7 +36,7 @@ int execProcess(char* command)
 		 fprintf(stdout, "Command = %s\n", argv[0]);
 		if (execvp(argv[0], argv) == -1) /*if there is an error*/
 		{
-			fprintf(stderr, "execvp failed\n");
+			plog("execvp failed\n", 1);
 			return -1;
 		}
 	}
@@ -45,12 +46,16 @@ return 1;
 /*PRIVATE disconnect a client*/
 int deleteClient(int *client_sock)
 {
+	char * msg;
 	if (close(*client_sock) != 0)
 	{
-		fprintf(stderr, "cannot close socket %d\n", *client_sock);
+		msg= calloc(64, sizeof(char));
+		sprintf(msg, "cannot close socket %d\n", *client_sock);
+		plog(msg, 1);
+		free(msg);
 		return -1;
 	}
-	fprintf(stdout, "Socket closed\n");
+	plog("Socket closed\n", 0);
 	return 1;
 }
 
@@ -65,7 +70,6 @@ void *connectionEtablished(void* client)
 	/*Receive a message from client*/
 	while( (read_size = recv(*client_sock , client_message , 512 , 0)) > 0 )
 	{
-		fprintf(stdout, "SIZE = %d\n", strlen(client_message));
 		if (strlen(client_message) > 2) /*if the message is not empty*/
 		{
 			/*format command (useless when i will have a real client)*/
@@ -77,14 +81,14 @@ void *connectionEtablished(void* client)
 			{	
 				char *byeMessage = "[SIMEON] : Disconnected ...BYE\n";
 				write(*client_sock , byeMessage , strlen(byeMessage)); /*send Bye Message*/
-				deleteClient(client_sock);/*TODO check when the cannot be closed*/
+				deleteClient(client_sock);/*TODO check when the socket cannot be closed*/
 				break;
 			}
 			if ( execProcess(msg) == -1) /*if the execvp failed, the new process is going to respond*/
 			{
 				char *forkFailedMessage= calloc(size + 40, sizeof(char));
 				sprintf(forkFailedMessage, "[SIMEON] : Your command '%s' is incorrect\n", msg);
-				write(*client_sock , forkFailedMessage , strlen(forkFailedMessage)); /*send Bye Message*/
+				write(*client_sock , forkFailedMessage , strlen(forkFailedMessage)); /*send fork failed Message*/
 				free(forkFailedMessage);
 				exit(0); /*exit the current process*/
 			}
