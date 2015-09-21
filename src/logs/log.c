@@ -15,13 +15,13 @@ void plog(char *msg, enum Level level)
 	switch(level)
 	{
 		case INFO:
-		fprintf(stdout, "[INFO] : %s\n", msg);
+		fprintf(stdout, "[INFO] : %s", msg);
 		break;
 		case WARNING:
-		fprintf(stdout, "[WARNING] : %s\n", msg);
+		fprintf(stdout, "[WARNING] : %s", msg);
 		break;
 		case ERROR:
-		fprintf(stderr, "[ERROR] : %s\n", msg);
+		fprintf(stderr, "[ERROR] : %s", msg);
 		break;
 		default:
 		break;

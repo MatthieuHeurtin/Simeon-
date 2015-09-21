@@ -1,11 +1,10 @@
 /*struct that represents Simeon's config*/
 struct configuration
 {
-	int test;
-
-
+	char* DEFAULT_IP;
+	int DEFAULT_PORT;
 };
 typedef struct configuration Config;
 
 /*load config*/
-int loadConfig();
+Config loadConfig();

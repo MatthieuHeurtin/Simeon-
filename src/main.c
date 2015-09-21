@@ -10,7 +10,6 @@
 #include "logs/log.h"
 #include "config/configManager.h"
 
-#include <errno.h>
 
 /*define*/
 #define RETURN_ERROR -1
@@ -22,7 +21,6 @@
 /*Usage: ip port*/
 int main(int argc, char** argv)
 {
-
 	/*variables*/
 	int port;
 	char *ip_addr; 
@@ -36,8 +34,10 @@ int main(int argc, char** argv)
 	int opt = 1;
 	struct sockaddr_in *client;
 	char *msg;
-	
-	loadConfig();
+	Config conf;
+	plog("Simeon v1.0 start...\n", 0);	
+	plog("Load config\n", 0);
+	conf = loadConfig();
 
 
 	/*TODO format parameters*/
@@ -76,7 +76,6 @@ int main(int argc, char** argv)
 	{
 		/*print the error message*/
 		plog("bind failed. Error\n", 1);
- printf("ERROR: %s\n", strerror(errno));
 		return RETURN_ERROR;
 	}
 	plog("bind done\n", 0);
