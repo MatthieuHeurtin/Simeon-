@@ -37,6 +37,10 @@ Config loadConfig()
 				plog("Cannot load the config file\n", 2);
 				exit(-1);
 			}
+			else 
+			{
+				
+			}
 			
 			
 		}	
