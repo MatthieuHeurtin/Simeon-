@@ -14,6 +14,6 @@ typedef struct client Client;
 
 
 /*configure an ip_address*/
-void createAddr(struct sockaddr_in *server, int port, char* ip_addr);
+void createAddr(struct sockaddr_in *server, int port);
 
 struct sockaddr_in *addSockaddr_in();

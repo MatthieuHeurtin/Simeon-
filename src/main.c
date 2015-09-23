@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<string.h>   
 #include<unistd.h>   
-
+#include<errno.h>
 #include "server/socketManager.h"
 #include "thread/threadManager.h"
 #include "thread/threadMethod.h"
@@ -48,12 +48,10 @@ int main(int argc, char** argv)
 	{
 		/*init parameters with default values*/
 		port = DEFAULT_PORT;
-		ip_addr = calloc(9, sizeof(char));		
-		strcpy(ip_addr, "127.0.0.1");
 	}
 
 	/*create server address*/
-	createAddr(&server, port, ip_addr);
+	createAddr(&server, port);
      
 	/*Create socket*/
 	listener_sock = socket(AF_INET , SOCK_STREAM , 0);
@@ -76,6 +74,7 @@ int main(int argc, char** argv)
 	{
 		/*print the error message*/
 		plog("bind failed. Error\n", 1);
+  printf("ERROR: %s\n", strerror(errno));
 		return RETURN_ERROR;
 	}
 	plog("bind done\n", 0);
