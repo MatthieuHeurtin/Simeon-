@@ -6,11 +6,11 @@
 
 
 /*configure an ip_address*/
-void createAddr(struct sockaddr_in* server ,int port, char* ip_addr)
+void createAddr(struct sockaddr_in* server ,int port)
 {
 	(*server).sin_family = AF_INET;
 	(*server).sin_port = htons(port);
-	inet_aton(ip_addr, &(*server).sin_addr);
+	server->sin_addr.s_addr = htonl(INADDR_ANY);
 }
 
 
