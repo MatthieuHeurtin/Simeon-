@@ -1,16 +1,25 @@
 #!/bin/bash
-#
-#
-# Get function from functions library
-. /etc/init.d/functions
-# Start the service FOO
-start() {
+
+
+# Start the service
+start() 
+{
       echo "START"
 }
-# Restart the service FOO
-stop() {
+
+# Stop the service
+stop() 
+{
       echo "STOP"
 }
+
+# Stop the service
+status() 
+{
+      echo "STATUS"
+}
+
+
 ### main logic ###
 case "$1" in
   start)
@@ -20,14 +29,14 @@ case "$1" in
         stop
         ;;
   status)
-        status FOO
+        status
         ;;
-  restart|reload|condrestart)
+  restart|reload)
         stop
         start
         ;;
   *)
-        echo $"Usage: $0 {start|stop|restart|reload|status}"
+        echo "Usage: $0 {start|stop|restart|reload|status}"
         exit 1
 esac
 exit 0

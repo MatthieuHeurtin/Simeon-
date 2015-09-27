@@ -2,7 +2,6 @@
 #include<stdio.h>
 #include<string.h>   
 #include<unistd.h>   
-#include<errno.h>
 #include "server/socketManager.h"
 #include "thread/threadManager.h"
 #include "thread/threadMethod.h"
@@ -13,9 +12,9 @@
 
 /*define*/
 #define RETURN_ERROR -1
-#define DEFAULT_PORT 8888
 #define MAX_CLIENT 30
 
+/*TODO add errno error */
 
 
 /*Usage: ip port*/
@@ -23,7 +22,6 @@ int main(int argc, char** argv)
 {
 	/*variables*/
 	int port;
-	char *ip_addr; 
 	int listener_sock; 
 	int c;
 	char *welcomeMessage = "[SIMEON] : Welcome! I am the version 1.0\r\n";
@@ -35,10 +33,13 @@ int main(int argc, char** argv)
 	struct sockaddr_in *client;
 	char *msg;
 	Config conf;
+
+	/*load the configuration*/
 	plog("Simeon v1.0 start...\n", 0);	
 	plog("Load config\n", 0);
 	conf = loadConfig();
 
+	showConfig(conf);
 
 	/*TODO format parameters*/
 	argv = NULL;
@@ -47,7 +48,7 @@ int main(int argc, char** argv)
 	if (argc != 2 && argv == NULL)
 	{
 		/*init parameters with default values*/
-		port = DEFAULT_PORT;
+		port = conf.DEFAULT_PORT;
 	}
 
 	/*create server address*/
@@ -74,7 +75,6 @@ int main(int argc, char** argv)
 	{
 		/*print the error message*/
 		plog("bind failed. Error\n", 1);
-  printf("ERROR: %s\n", strerror(errno));
 		return RETURN_ERROR;
 	}
 	plog("bind done\n", 0);

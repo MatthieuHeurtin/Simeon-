@@ -1,3 +1,5 @@
 #!/bin/bash
 mkdir build
 make
+cp ./init/Simeon.init /etc/init.d/
+chmod +x /etc/init.d/Simeon.init

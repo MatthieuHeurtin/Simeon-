@@ -70,12 +70,13 @@ void *connectionEtablished(void* client)
 	/*Receive a message from client*/
 	while( (read_size = recv(*client_sock , client_message , 512 , 0)) > 0 )
 	{
+fprintf(stdout, "MESSAGE FROM CLIENT %s\n", client_message);
 		if (strlen(client_message) > 2) /*if the message is not empty*/
 		{
-			/*format command (useless when i will have a real client)*/
+			/*format command and parameters */
 			int size = strlen(client_message) - 2;
 			char * msg = calloc(strlen(client_message)-2, sizeof(char));
-			strncpy(msg, client_message, size);
+			strncpy(msg, client_message, size); /*delete the \r\n put by telnet*/
 
 			if (strcmp(msg, "exit") == 0)
 			{	
