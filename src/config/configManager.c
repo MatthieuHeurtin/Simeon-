@@ -32,7 +32,11 @@ Config loadConfig()
 			} 			
 			else if (strcmp(name, "VERBOSE") == 0)
 			{
-				conf.VERBOSE = atoi(value); /*TODO verify PORT VALUE*/
+				conf.VERBOSE = atoi(value); /*TODO verify VALUE*/
+			} 
+			else if (strcmp(name, "CONTROL_PORT") == 0)
+			{
+				conf.CONTROL_PORT = atoi(value); /*TODO verify VALUE*/
 			} 
 		}
 		memset(name, 0, 24);
@@ -48,24 +52,24 @@ Config loadConfig()
 
 void showConfig(Config config)
 {
-	
+	LogLevel logLevel = initLoggerLevel();
 	char *msg;
-	plog("====DISPLAY SIMEON CONFIG==== \n", 0);
+	plog("==== DISPLAY SIMEON CONFIG ==== \n", logLevel.INFO);
 	msg= calloc(64, sizeof(char));
 	sprintf(msg, "DEFAULT_PORT %d\n", config.DEFAULT_PORT);
-	plog(msg, 0);
-	
+	plog(msg, logLevel.INFO);
 	memset(msg, 0, 64);
 	
 	sprintf(msg, "VERBOSE %d (if 0 == FALSE, TRUE otherwise)\n", config.VERBOSE);
-	plog(msg, 0);
-	plog("============================= \n", 0);
+	plog(msg, logLevel.INFO);
+	memset(msg, 0, 64);
+
+	sprintf(msg, "CONTROL_PORT %d\n", config.CONTROL_PORT);
+	plog(msg, logLevel.INFO);
+	memset(msg, 0, 64);
+
+	plog("=============================== \n", 0);
 	free(msg);
-
-
-
-
-
 }
 
 

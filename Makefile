@@ -8,11 +8,12 @@ TESTS= ./tests
 all: logs main server thread list IO config
 	#Linking phase
 	gcc $(BUILD)/*.o -o $(BUILD)/$(EXEC_NAME) -pthread $(CFLAGS)
-	
+	#Build is over	
+
 main : 
 	#Generate OBJECT for Main
 	gcc -c ./src/main.c -o  $(BUILD)/main.o  $(CFLAGS)
-
+	
 SRC_IO=$(wildcard ./src//IO/*.c)
 IO: $(SRC_IO)
 	#Generate OBJECT for IO
@@ -29,7 +30,7 @@ server: $(SRC_SERVER)
 SRC_THREAD=$(wildcard ./src//thread/*.c)
 thread: $(SRC_THREAD)
 	#Generate OBJECT for thread
-	gcc -c  $^ $(CFLAGS)
+	gcc -c  $^ $(CFLAGS) -D_GNU_SOURCE
 	mv *.o $(BUILD)/
 
 SRC_LIST=$(wildcard ./src//list/*.c)

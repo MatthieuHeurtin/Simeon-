@@ -3,6 +3,7 @@ struct configuration
 {
 	int DEFAULT_PORT;
 	int VERBOSE; /*if 0 verbose == false, true ptherwise*/
+	int CONTROL_PORT;
 };
 typedef struct configuration Config;
 
