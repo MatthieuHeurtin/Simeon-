@@ -60,7 +60,7 @@ void showConfig(Config config)
 	plog(msg, logLevel.INFO);
 	memset(msg, 0, 64);
 	
-	sprintf(msg, "VERBOSE %d (if 0 == FALSE, TRUE otherwise)\n", config.VERBOSE);
+	sprintf(msg, "VERBOSE %d\n", config.VERBOSE);
 	plog(msg, logLevel.INFO);
 	memset(msg, 0, 64);
 

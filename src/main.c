@@ -27,14 +27,11 @@ int main(int argc, char** argv)
 	char *welcomeMessage = "[SIMEON] : Welcome! I am the version 1.0\r\n";
 	Client client_sock[MAX_CLIENT]; 
 	int nb_client = 0;   
-	List list_clients = createList();
-	struct sockaddr_in server;
-	int opt = 1;
 	struct sockaddr_in *client;
 	char *msg;
 	Config conf;
 	LogLevel logLevel = initLoggerLevel();
-	
+	List list_clients = createList();
 
 
 	/*load the configuration*/
@@ -55,42 +52,13 @@ int main(int argc, char** argv)
 
 	
 	/*create thread which wait for admin connection*/
-	createThread(listenAdmin, NULL); 
+	createThread(listenAdmin, (void*)conf.CONTROL_PORT); 
 	
 
 
 
 
-	/*create server address*/
-	createAddr(&server, port);
-     
-	/*Create socket*/
-	listener_sock = socket(AF_INET , SOCK_STREAM , 0);
-	if (listener_sock == -1)
-	{
-		plog("Could not create Listener_sock", logLevel.ERROR);
-		return RETURN_ERROR;
-	}
-	plog("Listener_sock created\n", logLevel.INFO);
-     
-	/*put some options*/
-	if( setsockopt(listener_sock, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0 )
-	{
-		plog("setsockopt failed\n", logLevel.ERROR);
-		return RETURN_ERROR;
-	}
-     
-	/*Bind*/
-	if( bind(listener_sock,(struct sockaddr *)&server , sizeof(server)) < 0)
-	{
-		/*print the error message*/
-		plog("bind failed. Error\n", logLevel.ERROR);
-		return RETURN_ERROR;
-	}
-	plog("Bind done\n", logLevel.INFO);
-	     
-	/*sokcet is passive*/
-	listen(listener_sock , 2);
+	listener_sock = createPassiveSocket(port);
 	     
 
 
