@@ -4,6 +4,7 @@ struct configuration
 	int DEFAULT_PORT;
 	int VERBOSE; /*if 0 verbose == false, true ptherwise*/
 	int CONTROL_PORT;
+	char * LOGS_PATH;
 };
 typedef struct configuration Config;
 

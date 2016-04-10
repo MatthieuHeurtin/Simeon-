@@ -34,8 +34,11 @@ int main(int argc, char** argv)
 	List list_clients = createList();
 
 
-	/*load the configuration*/
+	plog("========================================================\n", logLevel.INFO);	
 	plog("Simeon v1.0 start...\n", logLevel.INFO);	
+	plog("========================================================\n", logLevel.INFO);	
+
+	/*load the configuration*/
 	plog("Load config\n", logLevel.INFO);
 	conf = loadConfig();
 	showConfig(conf);

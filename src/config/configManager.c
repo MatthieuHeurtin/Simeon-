@@ -13,8 +13,8 @@ Config loadConfig()
 	Config conf;
 	file = fopen(path, "r");
 
-	name = calloc(24,sizeof(char));
-	value = calloc(24, sizeof(char));
+	name = calloc(512,sizeof(char));
+	value = calloc(512, sizeof(char));
 	while (fscanf(file, "%s", name) != EOF) 
 	{
 		
@@ -38,6 +38,11 @@ Config loadConfig()
 			{
 				conf.CONTROL_PORT = atoi(value); /*TODO verify VALUE*/
 			} 
+			else if (strcmp(name, "LOGS_PATH") == 0)
+			{
+				conf.LOGS_PATH = calloc(1024, sizeof(char));
+				strcpy(conf.LOGS_PATH, value); /*TODO verify VALUE*/
+			} 
 		}
 		memset(name, 0, 24);
 		memset(value,0, 24);
@@ -56,18 +61,21 @@ void showConfig(Config config)
 	char *msg;
 	plog("==== DISPLAY SIMEON CONFIG ==== \n", logLevel.INFO);
 	msg= calloc(64, sizeof(char));
-	sprintf(msg, "DEFAULT_PORT %d\n", config.DEFAULT_PORT);
+	sprintf(msg, "DEFAULT_PORT = %d\n", config.DEFAULT_PORT);
 	plog(msg, logLevel.INFO);
 	memset(msg, 0, 64);
 	
-	sprintf(msg, "VERBOSE %d\n", config.VERBOSE);
+	sprintf(msg, "VERBOSE = %d\n", config.VERBOSE);
 	plog(msg, logLevel.INFO);
 	memset(msg, 0, 64);
 
-	sprintf(msg, "CONTROL_PORT %d\n", config.CONTROL_PORT);
+	sprintf(msg, "CONTROL_PORT = %d\n", config.CONTROL_PORT);
 	plog(msg, logLevel.INFO);
 	memset(msg, 0, 64);
 
+	sprintf(msg, "LOGS_PATH = %s\n", config.LOGS_PATH);
+	plog(msg, logLevel.INFO);
+	memset(msg, 0, 64);
 	plog("=============================== \n", 0);
 	free(msg);
 }

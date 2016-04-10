@@ -1,32 +1,45 @@
 #include"log.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#include "../config/configManager.h"
 
-/*log in file (file log)
+/*log in file (file log) */
 void flog(char * msg)
 {
-	
-
+	Config conf = loadConfig();
+	FILE *file = fopen(conf.LOGS_PATH, "a+");
+	if (file != NULL)
+	{
+		fprintf(file, "%s",msg);
+	}
+	fclose(file);
 }
-*/
+
 
 /*log on stdout (print log)*/
 void plog(char *msg, enum Level level)
 {
+	char *message_to_write = calloc(1024, sizeof(char));
 	switch(level)
-	{
+	{	
 		case INFO:
-		fprintf(stdout, "[INFO] : %s", msg);
+		sprintf(message_to_write, "[INFO] : %s", msg);
+		fprintf(stdout, message_to_write);		
 		break;
 		case WARNING:
-		fprintf(stdout, "[WARNING] : %s", msg);
+		sprintf(message_to_write, "[WARNING] : %s", msg);
+		fprintf(stdout, message_to_write);		
 		break;
 		case ERROR:
-		fprintf(stderr, "[ERROR] : %s", msg);
+		sprintf(message_to_write, "[ERROR] : %s", msg);
+		fprintf(stderr, message_to_write);
 		break;
 		default:
 		break;
 	}
+	flog(message_to_write);
+	free(message_to_write);
 }
 
 /*init a logger*/

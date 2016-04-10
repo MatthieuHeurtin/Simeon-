@@ -1,7 +1,5 @@
-
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "../server/socketManager.h"
 #include "list.h"
 

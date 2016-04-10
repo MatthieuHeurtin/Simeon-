@@ -1,4 +1,3 @@
-CC= gcc
 BUILD = ./build
 CFLAGS=-W -Wall -ansi -pedantic
 EXEC_NAME = run
@@ -6,48 +5,48 @@ TESTS= ./tests
 
 
 all: logs main server thread list IO config
-	#Linking phase
+	#LINING PHASE
 	gcc $(BUILD)/*.o -o $(BUILD)/$(EXEC_NAME) -pthread $(CFLAGS)
-	#Build is over	
+	#BUILD IS OVER	
 
 main : 
-	#Generate OBJECT for Main
+	#GENERATE OBJECT FOR 'MAIN'
 	gcc -c ./src/main.c -o  $(BUILD)/main.o  $(CFLAGS)
 	
 SRC_IO=$(wildcard ./src//IO/*.c)
 IO: $(SRC_IO)
-	#Generate OBJECT for IO
+	#GENERATE OBJECT FOR 'IO'
 	gcc -c  $^ $(CFLAGS)
 	mv *.o $(BUILD)/
 
 
 SRC_SERVER=$(wildcard ./src//server/*.c)
 server: $(SRC_SERVER)
-	#Generate OBJECT for server
+	#GENERATE OBJECT FOR 'SERVER'
 	gcc -c  $^ $(CFLAGS) -D_BSD_SOURCE
 	mv *.o $(BUILD)/
 
 SRC_THREAD=$(wildcard ./src//thread/*.c)
 thread: $(SRC_THREAD)
-	#Generate OBJECT for thread
+	#GENERATE OBJECT FOR 'THREAD'
 	gcc -c  $^ $(CFLAGS) -D_GNU_SOURCE
 	mv *.o $(BUILD)/
 
 SRC_LIST=$(wildcard ./src//list/*.c)
 list: $(SRC_LIST)
-	#Generate OBJECT for list
+	#GENERATE OBJECT FOR 'LIST'
 	gcc -c  $^ $(CFLAGS)
 	mv *.o $(BUILD)/
 
 SRC_LOGS=$(wildcard ./src//logs/*.c)
 logs: $(SRC_LOGS)
-	#Generate OBJECT for logs
+	#GENERATE OBJECT FOR 'LOGS'
 	gcc -c  $^ $(CFLAGS)
 	mv *.o $(BUILD)/
 
 SRC_CONFIG=$(wildcard ./src//config/*.c)
 config: $(SRC_CONFIG)
-	#Generate OBJECT for config
+	#GENERATE OBJECT FOR 'CONFIG'
 	gcc -c  $^ $(CFLAGS)
 	mv *.o $(BUILD)/
 

@@ -65,6 +65,10 @@ int writeInFile(char* path, char* msg)
 	{
 		fprintf(f, "%s" , msg);
 	}
+	else 
+	{
+		return -1;
+	}
 	fclose(f);
 	return 0;
 }
