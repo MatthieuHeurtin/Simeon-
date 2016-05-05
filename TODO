@@ -1,0 +1,12 @@
+- use errno for bind, etc...
+- finish test for list
+- add test for IO
+- finish option when you run a process
+- finish script used to use Simeon as a daemon
+- correct makefile for tests
+- test parameteres when the config is loaded
+- finish to put parameters in the config
+- add command to reload config while Simeon is running
+- add command to quit Simeon
+- test memory with valgrind
+- finish logs
