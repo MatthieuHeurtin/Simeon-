@@ -10,3 +10,5 @@
 - add command to quit Simeon
 - test memory with valgrind
 - finish logs
+- delete dependencies between files
+- create script for tests automation
