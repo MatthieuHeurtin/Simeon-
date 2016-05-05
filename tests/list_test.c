@@ -5,17 +5,93 @@
 #include "../src/list/list.h"
 
 
+/*This class is used to test if the file list.c works*/
+List testCreateList()
+{
+	fprintf(stdout, "TEST : createlist()\n");
+	List l = createList();
+	if (l != NULL)
+	{
+		fprintf(stderr, "ERROR : The created list should be NULL\n");
+		exit(-1);
+	}
+	fprintf(stdout, "... OK\n");
+	return l;
+}
+
+void testAddElement(List l)
+{
+	int integer = 69;
+	fprintf(stdout, "TEST:  addElement()\n");
+	l = addElement(l, &integer);
+	if (l == NULL)
+	{
+		fprintf(stderr, "ERROR : The list should not be NULL\n");
+		exit(-1);
+	}
+	if ((*(int*)(l->element)) != integer)
+	{
+		fprintf(stderr, "ERROR : The element should be %d\n",integer);
+		exit(-1);
+	}
+	if (l->next != NULL)
+	{
+		fprintf(stderr, "ERROR : The next should be NULL\n");
+		exit(-1);
+	}
+	fprintf(stdout, "... OK\n");
+}
+
+
+void testAddElements(List l)
+{
+	int integer = 69;
+	char character= 67;
+	fprintf(stdout, "TEST:  addElements\n");
+	l = addElement(l, & integer);
+	l = addElement(l, &character);
+	/*test first element (last added)*/
+	if (l == NULL)
+	{
+		fprintf(stderr, "ERROR : The list should not be NULL\n");
+		exit(-1);
+	}
+	if ((*(char*)(l->element)) != character)
+	{
+		fprintf(stderr, "ERROR : The element should be %c\n",character);
+		exit(-1);
+	}
+	if (l->next == NULL)
+	{
+		fprintf(stderr, "ERROR : The next should not be NULl\n");
+		exit(-1);
+	}
+	
+	/*Test last element (first added)*/
+	if (l->next == NULL)
+	{
+		fprintf(stderr, "ERROR : The next should not be NULl\n");
+		exit(-1);
+	}
+	if (*((int*)(l->next->element)) != integer)
+	{
+		fprintf(stderr, "ERROR : The element should be %d\n", integer);
+		exit(-1);
+	}
+	fprintf(stdout, "... OK\n");
+}
 
 
 
 int main(int argc, char** argv)
 {
-	//TEST list
-	int p = 78;
-	char i= 67;
-	List l = createList();
-	l = addElement(l, &p);
-	l = addElement(l, &i);
+	
+	List l;
+
+	l = testCreateList();
+	testAddElement(l);
+	testAddElements(l);
+	
 	/*l = addElement(l, 70);
 	l = addElement(l, 71);
 	l = addElement(l, 72);

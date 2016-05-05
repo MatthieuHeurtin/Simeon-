@@ -14,7 +14,15 @@ List createList()
 /*used to add an element*/
 List addElement(List l, void* element)
 {
-	List q = calloc(1, sizeof(*q));
+	List q;
+	if (l == NULL)
+	{
+		l = calloc(1, sizeof(l));
+		l->element = element;
+		l->next = NULL;
+		return l;
+	}
+	q = calloc(1, sizeof(*q));
 	q->element = element;
 	q->next = l;
 	return q;

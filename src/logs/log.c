@@ -20,6 +20,10 @@ void flog(char * msg)
 /*log on stdout (print log)*/
 void plog(char *msg, enum Level level)
 {
+	if (msg == NULL)
+	{
+		return;
+	}
 	char *message_to_write = calloc(1024, sizeof(char));
 	switch(level)
 	{	

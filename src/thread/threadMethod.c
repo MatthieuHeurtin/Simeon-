@@ -158,8 +158,7 @@ void *listenAdmin(void *port)
 	int acceptedSocket;
 	struct sockaddr_in *client;
 	LogLevel logLevel = initLoggerLevel();
-
-
+	
 
 	 /*connect on this socket if you want to admin Simeon*/
 
