@@ -4,7 +4,7 @@
 #include<string.h>
 #include "../config/configManager.h"
 
-/*log in file (file log) */
+/*log in file (file log) OBSOLETE 
 void flog(char * msg)
 {
 	Config conf = loadConfig();
@@ -15,35 +15,29 @@ void flog(char * msg)
 	}
 	fclose(file);
 }
+*/
 
 
 /*log on stdout (print log)*/
 void plog(char *msg, enum Level level)
 {
-	if (msg == NULL)
+	if (msg != NULL)
 	{
-		return;
+		switch(level)
+		{	
+			case INFO:
+			fprintf(stdout, "[INFO] : %s", msg);		
+			break;
+			case WARNING:
+			fprintf(stdout, "[WARNING] : %s", msg);		
+			break;
+			case ERROR:
+			fprintf(stderr, "[ERROR] : %s", msg);
+			break;
+			default:
+			break;
+		}
 	}
-	char *message_to_write = calloc(1024, sizeof(char));
-	switch(level)
-	{	
-		case INFO:
-		sprintf(message_to_write, "[INFO] : %s", msg);
-		fprintf(stdout, message_to_write);		
-		break;
-		case WARNING:
-		sprintf(message_to_write, "[WARNING] : %s", msg);
-		fprintf(stdout, message_to_write);		
-		break;
-		case ERROR:
-		sprintf(message_to_write, "[ERROR] : %s", msg);
-		fprintf(stderr, message_to_write);
-		break;
-		default:
-		break;
-	}
-	flog(message_to_write);
-	free(message_to_write);
 }
 
 /*init a logger*/

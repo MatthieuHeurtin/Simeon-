@@ -12,3 +12,4 @@
 - finish logs
 - delete dependencies between files
 - create script for tests automation
+- better way to format message send to a client

@@ -4,7 +4,7 @@ EXEC_NAME = run
 TESTS= ./tests
 
 
-all: logs main server thread list IO config
+all: logs main server thread list IO config thread_methods
 	#LINING PHASE
 	gcc $(BUILD)/*.o -o $(BUILD)/$(EXEC_NAME) -pthread $(CFLAGS)
 	#BUILD IS OVER	
@@ -32,6 +32,13 @@ thread: $(SRC_THREAD)
 	gcc -c  $^ $(CFLAGS) -D_GNU_SOURCE
 	mv *.o $(BUILD)/
 
+SRC_THREAD_METHODS=$(wildcard ./src//thread/threadMethods/*.c)
+thread_methods: $(SRC_THREAD_METHODS)
+	#GENERATE OBJECT FOR 'THREAD METHODS'
+	gcc -c  $^ $(CFLAGS) -D_GNU_SOURCE
+	mv *.o $(BUILD)/
+
+
 SRC_LIST=$(wildcard ./src//list/*.c)
 list: $(SRC_LIST)
 	#GENERATE OBJECT FOR 'LIST'
@@ -49,6 +56,9 @@ config: $(SRC_CONFIG)
 	#GENERATE OBJECT FOR 'CONFIG'
 	gcc -c  $^ $(CFLAGS)
 	mv *.o $(BUILD)/
+
+
+
 
 
 #compile tests files

@@ -1,13 +1,23 @@
 #include <pthread.h>
-#include "threadMethod.h"
-#include<stdlib.h>
-#include<stdio.h>
+#include "threadMethods/admin.h"
+#include "threadMethods/client.h"
 
-void createThread( void *(*threadMethod)  (void*), void* arg)
+/*the only arg is the port*/
+void createThreadWichListenAdmin(void * arg)
 {
 	pthread_t new_thread;
-	pthread_create(&new_thread, NULL, threadMethod, arg) ;
+	pthread_create(&new_thread, NULL, listenAdmin, arg) ;
 }
+
+
+
+void createThreadForAclient(void* arg)
+{
+	pthread_t new_thread;
+	pthread_create(&new_thread, NULL, connectionEtablished, arg) ;
+}
+
+
 
 
 

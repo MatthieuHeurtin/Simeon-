@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# Start the service
+runAllTests() 
+{
+	echo "Run all tests"
+}
+
+runListTests()
+{
+	echo "Run list tests"
+	echo "Copy sources in /tmp"
+	mkdir /tmp/listTest
+	cp ./tests/list_test.c /tmp/listTest
+	cp ./src/list/* /tmp/listTest
+	echo "Compile sources"
+	gcc -c $(TESTS)/list_test.c -o $(TESTS)/list_test.o 
+	mv $(TESTS)/*.o $(BUILD)/
+	gcc $(BUILD)/list_test.o $(BUILD)/list.o -o $(BUILD)/list_test
+
+
+
+}
+
+
+case "$1" in
+  all)
+        runAllTests
+        ;;
+  list)
+        runListTests
+        ;;
+  status)
+        status
+        ;;
+  restart|reload)
+        stop
+        start
+        ;;
+  *)
+        echo "help"
+	runAllTests
+        exit 1
+esac
+
+
+
