@@ -4,7 +4,7 @@ EXEC_NAME = run
 TESTS= ./tests
 
 
-all: logs main server thread list IO config thread_methods
+all: logs main server thread list IO config thread_methods signal_handler
 	#LINING PHASE
 	gcc $(BUILD)/*.o -o $(BUILD)/$(EXEC_NAME) -pthread $(CFLAGS)
 	#BUILD IS OVER	
@@ -57,6 +57,12 @@ config: $(SRC_CONFIG)
 	gcc -c  $^ $(CFLAGS)
 	mv *.o $(BUILD)/
 
+
+SRC_SIGNAL_HANDLER=$(wildcard ./src//signal_handler/*.c)
+signal_handler: $(SRC_SIGNAL_HANDLER)
+	#GENERATE OBJECT FOR 'SIGNAL_HANDLER'
+	gcc -c  $^ $(CFLAGS)
+	mv *.o $(BUILD)/
 
 
 

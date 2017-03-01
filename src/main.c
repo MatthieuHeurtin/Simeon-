@@ -7,24 +7,27 @@
 #include "list/list.h"
 #include "logs/log.h"
 #include "config/configManager.h"
-
+#include "signal_handler/handler.h"
+#include <errno.h>
+#include <pthread.h>
 
 /*define*/
 #define RETURN_ERROR -1
 #define MAX_CLIENT 30
-
-/*TODO add errno error */
-
+#define MAX_THREAD 10
 
 /*Usage: ip port & conf path*/
 int main(int argc, char** argv)
 {
+	/*important variables*/
+	Client client_sock[MAX_CLIENT];
+	pthread_t threads[MAX_THREAD];
+
 	/*variables*/
 	int port;
 	int listener_sock;	
 	int c;
 	char *welcomeMessage = "[SIMEON] : Welcome! I am the version 1.0\r\n";
-	Client client_sock[MAX_CLIENT]; 
 	int nb_client = 0;   
 	struct sockaddr_in *client;
 	char *msg;
@@ -32,10 +35,17 @@ int main(int argc, char** argv)
 	LogLevel logLevel = initLoggerLevel();
 	/*List list_clients = createList();*/
 
+	/*catch signals*/
+	handle_signal();
+
+	
 
 	plog("========================================================\n", logLevel.INFO);	
 	plog("Simeon v1.0 start...\n", logLevel.INFO);	
 	plog("========================================================\n", logLevel.INFO);	
+
+
+	
 
 	/*load the configuration*/
 	plog("Load config\n", logLevel.INFO);
@@ -55,8 +65,8 @@ int main(int argc, char** argv)
 	
 	/*create thread which wait for admin connection*/
 	plog("Create listener for ADMIN connection...\n", logLevel.INFO);
-	createThreadWichListenAdmin((void*)conf.CONTROL_PORT); 
-	
+	threads[0] = createThreadWichListenAdmin((void*)conf.CONTROL_PORT); 
+		
 
 
 	plog("Create listener for CLIENTS connection...\n", logLevel.INFO);
@@ -81,8 +91,7 @@ int main(int argc, char** argv)
 		
 		if (client_sock[nb_client].id < 0)
 		{
-			plog("accept failed from client\n", logLevel.ERROR);
-			return RETURN_ERROR;
+			plog("[main.c] accept failed from client\n", logLevel.ERROR);
 		}
 		
 		/*add to list of client
@@ -105,10 +114,6 @@ int main(int argc, char** argv)
 		createThreadForAclient(&client_sock[nb_client]); /*create thread*/
 		nb_client ++;
 	}	
-	
-
-
-
     return 0;
 }
 

@@ -65,7 +65,7 @@ char** getParameters(char* msg)
 	/*count number of parameters*/
 	while (msg[i] != '\0')
 	{
-		if (msg[i] == 32)
+		if (msg[i] == 32) /*32 = space*/
 		{
 			number_of_parameters++;
 		}
@@ -95,13 +95,14 @@ char** getParameters(char* msg)
 	return parameters;
 }
 
-char * formatMessage(char * client_message)
+
+void formatMessage(char * client_message, char ** formated_message)
 {
 	/*format command and parameters */
 	int size = strlen(client_message) - 2;
-	char * msg = calloc(size, sizeof(char));
-	strncpy(msg, client_message, size); /*delete the \r\n put by telnet*/
-	return msg;
+	free(*formated_message);
+	*formated_message = calloc(size, sizeof(char));
+	strncpy(*formated_message, client_message, size); /*delete the \r\n put by telnet*/
 }
 
 

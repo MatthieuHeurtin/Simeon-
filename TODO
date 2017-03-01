@@ -4,7 +4,7 @@
 - finish option when you run a process
 - finish script used to use Simeon as a daemon
 - correct makefile for tests
-- test parameteres when the config is loaded
+- test parameters when the config is loaded
 - finish to put parameters in the config
 - add command to reload config while Simeon is running
 - add command to quit Simeon
@@ -13,3 +13,5 @@
 - delete dependencies between files
 - create script for tests automation
 - better way to format message send to a client
+- check when Simeon received a sigkill (close all socket)
+- create a huge struct that contains all element (connection, thread, etc)

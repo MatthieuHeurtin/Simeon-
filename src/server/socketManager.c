@@ -39,7 +39,7 @@ int createPassiveSocket(int port)
 		plog("Could not create Listener_sock", logLevel.ERROR);
 		return RETURN_ERROR;
 	}
-	plog("Listener_sock created\n", logLevel.INFO);
+	plog("[Socket] Listener_sock created\n", logLevel.INFO);
      
   
 	/*Bind*/

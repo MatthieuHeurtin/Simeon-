@@ -17,13 +17,14 @@ void *connectionEtablished(void* client)
 	int read_size;
 	char client_message[512];
 	char ** command;
-	char * msg;
+	char * msg= NULL;
+
 	/*Receive a message from client*/
 	while( (read_size = recv(*client_sock , client_message , 512 , 0)) > 0 )
 	{
 		if (strlen(client_message) > 2) /*if the message is not empty*/
 		{
-			msg = formatMessage(client_message);
+			formatMessage(client_message, &msg);
 			if (strcmp(msg, "exit") == 0)
 			{	
 				char *byeMessage = "[SIMEON] : Disconnected ...BYE\n";
