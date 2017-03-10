@@ -4,7 +4,7 @@ EXEC_NAME = run
 TESTS= ./tests
 
 
-all: logs main server thread list IO config thread_methods signal_handler
+all: logs main server thread list IO config thread_methods signal_handler global_context
 	#LINING PHASE
 	gcc $(BUILD)/*.o -o $(BUILD)/$(EXEC_NAME) -pthread $(CFLAGS)
 	#BUILD IS OVER	
@@ -65,6 +65,11 @@ signal_handler: $(SRC_SIGNAL_HANDLER)
 	mv *.o $(BUILD)/
 
 
+SRC_GLOBAL_CONTEXT=$(wildcard ./src//IO/*.c)
+global_context: $(SRC_GLOBAL_CONTEXT)
+	#GENERATE OBJECT FOR 'IO'
+	gcc -c  $^ $(CFLAGS)
+	mv *.o $(BUILD)/
 
 
 #compile tests files

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../server/socketManager.h"
 #include "list.h"
 
 /*used to create a list*/
@@ -39,12 +38,6 @@ void printChar(void * element)
 	char * value = (char*)element;
 	fprintf(stdout, "Element = %d\n", *value);
 }
-void printClient(void * element)
-{
-	Client * value = (Client*)element;
-	fprintf(stdout, "Element id= %d\n", value->id);
-}
-
 
 
 /*used to display all elements*/

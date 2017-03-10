@@ -16,7 +16,6 @@ void showList(List l, void (*function) ());
 /*list of print function (used for debug)*/
 void printInt(void * element);
 void printChar(void * element);
-void printClient(void * element);
 
 
 

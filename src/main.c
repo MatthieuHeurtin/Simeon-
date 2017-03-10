@@ -4,10 +4,9 @@
 #include<unistd.h>   
 #include "server/socketManager.h"
 #include "thread/threadManager.h"
-#include "list/list.h"
 #include "logs/log.h"
-#include "config/configManager.h"
 #include "signal_handler/handler.h"
+#include "global_context/global_variables.h"
 #include <errno.h>
 #include <pthread.h>
 
@@ -23,21 +22,34 @@ int main(int argc, char** argv)
 	Client client_sock[MAX_CLIENT];
 	pthread_t threads[MAX_THREAD];
 
+	/*global_context*/
+	Context context = calloc(1, sizeof(Context));
+
 	/*variables*/
+	int id_of_incomming_connection;
 	int port;
 	int listener_sock;	
 	int c;
 	char *welcomeMessage = "[SIMEON] : Welcome! I am the version 1.0\r\n";
-	int nb_client = 0;   
-	struct sockaddr_in *client;
+	struct sockaddr_in *sockaddr_client;
 	char *msg;
-	Config conf;
 	LogLevel logLevel = initLoggerLevel();
-	/*List list_clients = createList();*/
+	Client incomming_client;
+	
+	/*init global context*/
+	plog("[main.c] Init Global context\n", logLevel.INFO);
+	/*load the configuration*/
+	plog("[main.c] Load config\n", logLevel.INFO);
+	context->conf = loadConfig();
+	showConfig(context->conf);
+	/*init list of connected clients*/	
+	plog("[main.c] Init list of incomming connections\n", logLevel.INFO);
+	context->connected_clients = createList();
+	context->adminThread_event =1;
 
-	/*catch signals*/
+	/*catch signals
 	handle_signal();
-
+*/
 	
 
 	plog("========================================================\n", logLevel.INFO);	
@@ -47,10 +59,6 @@ int main(int argc, char** argv)
 
 	
 
-	/*load the configuration*/
-	plog("Load config\n", logLevel.INFO);
-	conf = loadConfig();
-	showConfig(conf);
 
 	/*TODO format parameters*/
 	argv = NULL;
@@ -59,13 +67,13 @@ int main(int argc, char** argv)
 	if (argc != 2 && argv == NULL)
 	{
 		/*init parameters with default values*/
-		port = conf.DEFAULT_PORT;
+		port = context->conf.DEFAULT_PORT;
 	}
 
 	
 	/*create thread which wait for admin connection*/
 	plog("Create listener for ADMIN connection...\n", logLevel.INFO);
-	threads[0] = createThreadWichListenAdmin((void*)conf.CONTROL_PORT); 
+	threads[0] = createThreadWichListenAdmin((void*)context->conf.CONTROL_PORT); 
 		
 
 
@@ -76,43 +84,45 @@ int main(int argc, char** argv)
 	{
 		/*Accept an incoming connection*/
 		plog("Waiting for connections...\n", logLevel.INFO);
-		c = sizeof(struct sockaddr_in);
+		
 
 		/*create struct client and wait an incomming connection*/
-		client = addSockaddr_in();  
-		client_sock[nb_client].id = accept(listener_sock, (struct sockaddr *)client, (socklen_t*)&c);
+		c = sizeof(struct sockaddr_in);
+		sockaddr_client = addSockaddr_in();  
+		id_of_incomming_connection = accept(listener_sock, (struct sockaddr *)sockaddr_client, (socklen_t*)&c);
 
-
-		/*TODO init client with log system*/
-		client_sock[nb_client].name = calloc(9, sizeof(char));
-				
-
-		/*TODO check if the client is already connected*/
-		
-		if (client_sock[nb_client].id < 0)
+		if (id_of_incomming_connection < 0)
 		{
 			plog("[main.c] accept failed from client\n", logLevel.ERROR);
 		}
 		
+		incomming_client.id = id_of_incomming_connection;
+		/*TODO init client with log system*/
+		incomming_client.name = calloc(9, sizeof(char));
+				
+
+		/*TODO check if the client is already connected*/
+		
+	
 		/*add to list of client
 		list_clients = addElement(list_clients, &client_sock[nb_client]);
 		showList(list_clients, printClient);*/
 
 		/*format message to send to the new client*/
 		msg= calloc(64, sizeof(char));
-		sprintf(msg, "Connection accepted and moved in a thread, socket = %d\n", client_sock[nb_client].id);
+		sprintf(msg, "Connection accepted and moved in a thread, socket = %d\n", incomming_client.id);
 		plog(msg, logLevel.INFO);
 		
 
 		/*write welcome*/  		
-		write((int)client_sock[nb_client].id , welcomeMessage , strlen(welcomeMessage)); 
+		write((int)incomming_client.id , welcomeMessage , strlen(welcomeMessage)); 
 		memset(msg, 0, 64);
-		sprintf(msg, "[SIMEON] : You are %d\n",client_sock[nb_client].id);
-		write((int)client_sock[nb_client].id , msg , strlen(msg)); 
+		sprintf(msg, "[SIMEON] : You are %d\n",incomming_client.id);
+		write((int)incomming_client.id , msg , strlen(msg)); 
 		free(msg);
 
-		createThreadForAclient(&client_sock[nb_client]); /*create thread*/
-		nb_client ++;
+		createThreadForAclient(&incomming_client); /*create thread*/
+		context->nb_client ++;
 	}	
     return 0;
 }

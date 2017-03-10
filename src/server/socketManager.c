@@ -36,7 +36,7 @@ int createPassiveSocket(int port)
 	listener_sock = socket(AF_INET , SOCK_STREAM , 0);
 	if (listener_sock == -1)
 	{
-		plog("Could not create Listener_sock", logLevel.ERROR);
+		plog("[Socket] Could not create Listener_sock", logLevel.ERROR);
 		return RETURN_ERROR;
 	}
 	plog("[Socket] Listener_sock created\n", logLevel.INFO);
@@ -46,10 +46,10 @@ int createPassiveSocket(int port)
 	if( bind(listener_sock,(struct sockaddr *)&server , sizeof(server)) < 0)
 	{
 		/*print the error message*/
-		plog("bind failed. Error\n", logLevel.ERROR);
+		plog("[Socket] bind failed. Error\n", logLevel.ERROR);
 		return RETURN_ERROR;
 	}
-	plog("Bind done\n", logLevel.INFO);
+	plog("[Socket] Bind done\n", logLevel.INFO);
 	     
 	/*sokcet is passive*/
 	listen(listener_sock , 2);
