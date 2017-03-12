@@ -10,10 +10,11 @@
 #include "../..//server/socketManager.h"
 #include "threadMethod.h"
 #include <pthread.h>
+#include "../../global_context/global_variables.h"
 
 #define RETURN_ERROR -1
 
-/*All this method are executed by a thread. This thread represents a connection with the client*/
+/*All this method are executed by a thread. This thread represents a connection with the admin*/
 
 
 /*PRIVATE*/
@@ -43,7 +44,7 @@ void ask_password(int acceptedSocket, LogLevel logLevel)
 }
 
 /*PRIVATE*/
-void connection_openned(int acceptedSocket, int * continu)
+void connection_openned(int acceptedSocket, int *continu)
 {
 	char* admin_message = calloc(512, sizeof(char));
 	char *msg = NULL;
@@ -75,22 +76,23 @@ void connection_openned(int acceptedSocket, int * continu)
 
 
 /*PUBLIC*/
-void *listenAdmin(void *port)
+void *listenAdmin(void *void_context)
 {
 	int listener_sock;
 	int c;
 	int acceptedSocket;
 	struct sockaddr_in *client;
 	LogLevel logLevel = initLoggerLevel();
-	int continu = 1;
+	Context context = (Context)void_context;
+	int *continu = &context->adminThread_event;
 
 	 /*connect on this socket if you want to admin Simeon*/
-	listener_sock = createPassiveSocket((int)port);
+	listener_sock = createPassiveSocket((int)(context->conf.CONTROL_PORT));
 	
 	if (listener_sock != RETURN_ERROR)
 	{
 	pthread_cleanup_push(deleteClient, &listener_sock);
-		while (continu)
+		while (*continu)
 		{
 			plog("[admin.c] Start listenning for connection from Matt...\n", logLevel.INFO);
 			c = sizeof(struct sockaddr_in);
@@ -102,7 +104,7 @@ void *listenAdmin(void *port)
 			ask_password(acceptedSocket, logLevel);
 		
 			/*Receive a message from admin*/
-			connection_openned(acceptedSocket, &continu);
+			connection_openned(acceptedSocket, continu);
 		}
 
 	pthread_cleanup_pop(1); /*free the passive socket*/

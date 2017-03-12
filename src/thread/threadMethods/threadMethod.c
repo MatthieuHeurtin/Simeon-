@@ -19,7 +19,7 @@ int execProcess(char** parameters)
 	if (pid == -1) /*if problem*/
 	{
 		plog("fork failed\n", 1);
-		return 1;
+		return RETURN_ERROR;
 	} 
 	else if (pid>0) /*parents*/ 
 	{
@@ -33,7 +33,7 @@ int execProcess(char** parameters)
 		if (execvp(parameters[0], parameters) == -1) /*if there is an error*/
 		{
 			plog("execvp failed\n", 1);
-			return -1;
+			return RETURN_ERROR;
 		}
 	}
 	return 0;

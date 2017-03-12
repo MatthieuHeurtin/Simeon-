@@ -43,6 +43,11 @@ Config loadConfig()
 				conf.LOGS_PATH = calloc(1024, sizeof(char));
 				strcpy(conf.LOGS_PATH, value); /*TODO verify VALUE*/
 			} 
+			else if (strcmp(name, "DEFAULT_NAME") == 0)
+			{
+				conf.DEFAULT_NAME = calloc(1024, sizeof(char));
+				strcpy(conf.DEFAULT_NAME, value); /*TODO verify value*/
+			}
 		}
 		memset(name, 0, 24);
 		memset(value,0, 24);
@@ -74,6 +79,10 @@ void showConfig(Config config)
 	memset(msg, 0, 64);
 
 	sprintf(msg, "LOGS_PATH = %s\n", config.LOGS_PATH);
+	plog(msg, logLevel.INFO);
+	memset(msg, 0, 64);
+
+	sprintf(msg, "DEFAULT_NAME = %s\n", config.DEFAULT_NAME);
 	plog(msg, logLevel.INFO);
 	memset(msg, 0, 64);
 	plog("=============================== \n", 0);

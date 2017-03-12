@@ -2,7 +2,7 @@
 #include "threadMethods/admin.h"
 #include "threadMethods/client.h"
 
-/*the only arg is the port*/
+/*the only arg is the context*/
 pthread_t createThreadWichListenAdmin(void * arg)
 {
 	pthread_t new_thread;

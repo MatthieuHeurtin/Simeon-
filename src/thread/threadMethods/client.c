@@ -9,15 +9,19 @@
 #include "../../logs/log.h"
 #include "../../server/socketManager.h"
 #include "threadMethod.h"
-/*All this method are executed by a thread. This thread represents a connection with the client*/
+#include "../../global_context/global_variables.h"
 
-void *connectionEtablished(void* client)
+
+/*All this method are executed by a thread. This thread represents a connection with the client*/
+void *connectionEtablished(void* void_context)
 {
-	int * client_sock = (int*)client;
 	int read_size;
 	char client_message[512];
 	char ** command;
 	char * msg= NULL;
+	Context context = (Context)void_context;
+	Client current_client = *((Client*)GetLastAdded(context->connected_clients));
+	int * client_sock = &current_client.id;
 
 	/*Receive a message from client*/
 	while( (read_size = recv(*client_sock , client_message , 512 , 0)) > 0 )

@@ -73,7 +73,7 @@ int main(int argc, char** argv)
 	
 	/*create thread which wait for admin connection*/
 	plog("Create listener for ADMIN connection...\n", logLevel.INFO);
-	threads[0] = createThreadWichListenAdmin((void*)context->conf.CONTROL_PORT); 
+	threads[0] = createThreadWichListenAdmin((void*)context); 
 		
 
 
@@ -82,6 +82,7 @@ int main(int argc, char** argv)
 	     
 	while (1)
 	{
+fprintf(stdout, "MATTTTTT %d\n", context->adminThread_event);
 		/*Accept an incoming connection*/
 		plog("Waiting for connections...\n", logLevel.INFO);
 		
@@ -98,9 +99,10 @@ int main(int argc, char** argv)
 		
 		incomming_client.id = id_of_incomming_connection;
 		/*TODO init client with log system*/
-		incomming_client.name = calloc(9, sizeof(char));
-				
-
+		incomming_client.name = calloc(64, sizeof(char));
+		strcpy(incomming_client.name, context->conf.DEFAULT_NAME);		
+		context->connected_clients = addElement(context->connected_clients, &incomming_client); 
+		
 		/*TODO check if the client is already connected*/
 		
 	
@@ -121,7 +123,7 @@ int main(int argc, char** argv)
 		write((int)incomming_client.id , msg , strlen(msg)); 
 		free(msg);
 
-		createThreadForAclient(&incomming_client); /*create thread*/
+		createThreadForAclient((void*)context); /*create thread*/
 		context->nb_client ++;
 	}	
     return 0;

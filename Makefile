@@ -77,12 +77,12 @@ tests: list_test
 	#Generate OBJECT for tests end
 	
 
-list_test: list 
+list_tests: list 
 	#Generate OBJECT for tests list
-	gcc -c $(TESTS)/list_test.c -o $(TESTS)/list_test.o 
+	gcc -c $(TESTS)/list_tests.c -o $(TESTS)/list_tests.o 
 	mv $(TESTS)/*.o $(BUILD)/
-	gcc $(BUILD)/list_test.o $(BUILD)/list.o -o $(BUILD)/list_test
-
+	gcc $(BUILD)/list_tests.o $(BUILD)/list.o -o $(BUILD)/list_tests
+	#BUILD IS OVER
 
 
 clean: 

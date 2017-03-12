@@ -27,6 +27,18 @@ List addElement(List l, void* element)
 	return q;
 }
 
+void * GetLastAdded(List l)
+{
+	if (l==NULL)
+	{
+		return NULL;
+	}
+	else
+	{
+		return l->element;
+	}
+}
+
 
 void printInt(void * element)
 {

@@ -1,7 +1,6 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>   
-#include<unistd.h>   
 #include "../src/list/list.h"
 
 
@@ -80,6 +79,23 @@ void testAddElements(List l)
 	}
 	fprintf(stdout, "... OK\n");
 }
+void test_GetLastAdded(List l)
+{
+	int integer1 = 69;
+	int integer2= 67;
+	fprintf(stdout, "TEST:  GetLastAdded()\n");
+	l = addElement(l, &integer1);
+	l = addElement(l, &integer2);
+	void* value = GetLastAdded(l);
+	if ((*(int*)value) != integer2)
+	{
+		fprintf(stderr, "ERROR : The element should be %d but was %d\n", integer2, (*(int*)value));
+		exit(-1);
+	}
+	fprintf(stdout, "... OK\n");
+}
+
+
 
 
 
@@ -91,7 +107,8 @@ int main(int argc, char** argv)
 	l = testCreateList();
 	testAddElement(l);
 	testAddElements(l);
-	
+	test_GetLastAdded(l);	
+
 	/*l = addElement(l, 70);
 	l = addElement(l, 71);
 	l = addElement(l, 72);

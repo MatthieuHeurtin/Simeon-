@@ -10,6 +10,7 @@ typedef struct list* List;
 List createList();
 List addElement(List l, void* element);
 void showList(List l, void (*function) ());
+void * GetLastAdded(List l);
 
 
 
