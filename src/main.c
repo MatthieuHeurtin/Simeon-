@@ -80,9 +80,8 @@ int main(int argc, char** argv)
 	plog("Create listener for CLIENTS connection...\n", logLevel.INFO);
 	listener_sock = createPassiveSocket(port);
 	     
-	while (1)
+	while (context->adminThread_event)
 	{
-fprintf(stdout, "MATTTTTT %d\n", context->adminThread_event);
 		/*Accept an incoming connection*/
 		plog("Waiting for connections...\n", logLevel.INFO);
 		
@@ -125,8 +124,8 @@ fprintf(stdout, "MATTTTTT %d\n", context->adminThread_event);
 
 		createThreadForAclient((void*)context); /*create thread*/
 		context->nb_client ++;
-	}	
-    return 0;
+	}
+	return 0;
 }
 
 

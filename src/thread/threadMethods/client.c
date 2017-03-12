@@ -24,7 +24,7 @@ void *connectionEtablished(void* void_context)
 	int * client_sock = &current_client.id;
 
 	/*Receive a message from client*/
-	while( (read_size = recv(*client_sock , client_message , 512 , 0)) > 0 )
+	while( ((read_size = recv(*client_sock , client_message , 512 , 0)) > 0) && context->adminThread_event )
 	{
 		if (strlen(client_message) > 2) /*if the message is not empty*/
 		{
@@ -49,6 +49,9 @@ void *connectionEtablished(void* void_context)
 			memset(client_message ,0 , 512);  /*clear the variable*/
 		}
 	}
-return NULL;
+	free(command);
+	free(msg);
+	deleteClient(client_sock);
+	return NULL;
 }
 
