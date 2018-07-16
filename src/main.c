@@ -113,7 +113,6 @@ int main(int argc, char** argv)
 		msg= calloc(64, sizeof(char));
 		sprintf(msg, "Connection accepted and moved in a thread, socket = %d\n", incomming_client.id);
 		plog(msg, logLevel.INFO);
-		
 
 		/*write welcome*/  		
 		write((int)incomming_client.id , welcomeMessage , strlen(welcomeMessage)); 
