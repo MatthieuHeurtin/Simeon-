@@ -1,5 +1,5 @@
 # Simeon-
-The main purpose of Simeon is to be able to run a Graphic software (such as firefox, gedit, etc...) on a remote computer, because it is not possible with ssh.
+The main purpose of Simeon is to be able to run linux command on a remote computer from my phone.
 
 CONTENT
 	./src/*
